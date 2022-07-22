@@ -1,0 +1,162 @@
+<p-toast></p-toast>
+<div class="main-content">
+  <div class="container-fluid">
+
+      <div class="row">
+        <div class="card">
+
+              <div class="card-header card-header-danger card-header-icon">
+                <div class="card-icon"><i class="material-icons">person</i></div>
+                <h4 class="card-title">Listes Prestataires </h4>
+          <br>
+            <div class="row ">
+              &nbsp;&nbsp;&nbsp;              &nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                <input  pInputText type="text" (input)="dt.filter($event.target.value, 'firstNamepres', 'startsWith')" placeholder="Rechercher par nom" >
+                &nbsp;&nbsp;&nbsp;                 &nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+
+
+
+                <p-calendar  (onSelect)="getallprestatairesbydate($event)" (onClearClick)="cleartable()" [showButtonBar]="true" styleClass="p-column-filter" placeholder="Date inscription" [readonlyInput]="true" dateFormat="yy-mm-dd"
+                ></p-calendar>
+                &nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+
+              <mat-form-field class="example-full-width" appearance="fill" >
+       <mat-label>Specialisation</mat-label>
+       <mat-select matNativeControl id="specialisations"
+        [(ngModel)]="selectedspecialities"  [ngModelOptions]="{standalone: true}"
+       multiple (ngModelChange)="getallprestatairesbyspec()" >
+         <mat-option *ngFor=" let space of specialisationss"  [value]="space.name"   >
+           {{space.name}}
+         </mat-option>
+       </mat-select>
+       <button mat-button *ngIf="selectedspecialities" matSuffix mat-icon-button aria-label="Clear"
+    (click)="cleartablee();$event.stopPropagation()">
+    <mat-icon>close</mat-icon>
+  </button>
+     </mat-form-field>
+  </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <p-table  #dt [value]="prestataire"   [scrollable]="true" scrollHeight="400px"
+              [rowHover]="true" [globalFilterFields]="['firstNamepres','specialisations']" [loading]="loading"
+              [rows]="5" [showCurrentPageReport]="true"
+              [paginator]="true" currentPageReportTemplate="Affichage de {first} à {last} entrées sur {totalRecords}"
+              [filterDelay]="0"
+
+
+
+              >
+                <ng-template pTemplate="header" >
+                  <tr>
+                    <th pSortableColumn="firstNamepres">Nom & Prenom <p-sortIcon field="firstNamepres"></p-sortIcon></th>
+
+                    <th>Email</th>
+                    <th pSortableColumn="date_inscrip">Date registration <p-sortIcon field="date_inscrip"></p-sortIcon></th>
+
+                    <th pSortableColumn="specialisations">Specialisation <p-sortIcon field="specialisations"></p-sortIcon></th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-pres >
+                  <tr>
+
+
+                    <td>
+                      <img [alt]="pres.firstNamepres" *ngIf="pres.photopres !== null;else contenu_pas_bon" src="http://localhost:8081/api/api/image/logo/{{pres.photopres}}" width="50" class="rounded-circle" style="vertical-align: middle" />
+                      <ng-template #contenu_pas_bon> <img src="assets/images/avatars/avat.jpg" alt="" width="50" class="rounded-circle" style="vertical-align: middle"></ng-template>
+                      &nbsp;
+                      <span class="image-text">{{pres.firstNamepres}}&nbsp;
+                      {{pres.lastNamepres}}</span>
+
+                      </td>
+                    <td>{{pres.emailpres}}</td>
+                    <td>{{pres.date_inscrip}}</td>
+                    <td>{{pres.specialisations}}</td>
+                    <td class="td-actions text-right">
+
+                      <button pButton pRipple icon="pi pi-info-circle" class="p-button-rounded p-button-info" (click)="profilprestataire(pres)"  pTooltip="Details" ></button>
+
+                      &nbsp;
+
+                      <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deletepres(pres)"  pTooltip="supprimer"></button>
+                      </td>
+
+                  </tr>
+
+
+
+
+
+
+                  <!---->
+                </ng-template>
+                <ng-template pTemplate="summary">
+                  <div class="p-d-flex p-ai-center p-jc-between">
+                    Au total, il y a
+                    {{prestataire ? prestataire.length : 0 }} prestataires.
+                  </div>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8" class="center">Aucun prestataire trouvé</td>
+                </tr>
+            </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+      </div>
+      <p-dialog [(visible)]="prestataireDialog" [style]="{width: '450px'}" header="Prestataire Details" [modal]="true" styleClass="p-fluid">
+        <ng-template pTemplate="content">
+         <img [src]="'http://localhost:8081/api/api/image/logo/' + press.photopres" [alt]="press.photopres" class="center" height="150px" width="100px" >
+         <br>
+              <div class="p-field">
+                <label for="name">Nom & Prenom&nbsp;&nbsp;</label>
+                {{press.firstNamepres}} {{press.lastNamepres}}
+                </div>
+                <div class="p-field">
+                  <label for="name">Numero telephone&nbsp;&nbsp;</label>
+                    +216{{press.telpres}}
+                  </div>
+                  <div class="p-field">
+                    <label for="name">Email&nbsp;&nbsp;</label>
+                      {{press.emailpres}}
+                    </div>
+                    <div class="p-field">
+                      <label for="name">CIN&nbsp;&nbsp;</label>
+                        {{press.cin}}
+                      </div>
+                      <div class="p-field">
+                        <label for="name">Adresse&nbsp;&nbsp;</label>
+                          {{press.adressepres}}
+                        </div>
+                        <div class="p-field">
+                          <label for="name">Specialisations&nbsp;&nbsp;</label>
+                           <p> {{press.specialisations}} </p>
+                          </div>
+                        <div class="p-field">
+                          <label for="name">Date inscription&nbsp;&nbsp;</label>
+                            {{press.date_inscrip}}
+                          </div>
+
+
+        </ng-template>
+
+
+    </p-dialog>
+
+         <p-confirmDialog [style]="{width: '500px'}"></p-confirmDialog>

@@ -1,0 +1,56 @@
+<div class="dashboard">
+  <div class="dashboard__profile card profile-card" style="width: 40%;">
+    <div class="card-body profile-card__body">
+      <img *ngIf="client.photoclt == null " src="assets/images/avatars/avat.jpg" alt="" height="150" width="150">
+
+      <!--   <img src="assets/images/avatars/avat.jpg" alt="">-->
+      <!--  <img src="http://localhost:8081/api/apii/image/logo/{{client.photoclt}}" class="rounded"
+   alt="Grokonez-About Image" width="200px" height="150">-->
+      <img *ngIf="client.photoclt !== null " mat-card-image
+        src="http://localhost:8081/api/apii/image/logo/{{client.photoclt}}" class="rounded" alt="Photo of a Shiba Inu"
+        height="150" width="150">
+
+
+
+      <br>
+      <div class="profile-card__name">{{ client.firstNameclt }} {{client.lastNameclt}} </div>
+      <div class="profile-card__email">{{ client.emailclt}}</div>
+
+      <div class="profile-card__edit"><a (click)="gotoprofil()"><a routerLink="/All4MyCar/client/espace-client/profil"
+          class="btn btn-secondary btn-sm">Editer le profil
+        </a></a></div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <div class="dashboard__address card address-card address-card--featured" style="width: 50%;">
+    <div class="address-card__badge tag-badge tag-badge--theme">Client</div>
+    <div class="address-card__body">
+      <div class="address-card__name">{{ client.firstNameclt}} {{client.lastNameclt}}</div>
+      <div class="address-card__row">
+        <div class="address-card__row-title">Adresse</div>
+        <div class="address-card__row-content">{{client.adresseclt}}</div>
+      </div>
+      <div class="address-card__row">
+        <div class="address-card__row-title">Phone Number</div>
+        <div class="address-card__row-content">{{client.telclt}}</div>
+      </div>
+      <div class="address-card__row">
+        <div class="address-card__row-title">Numero CIN</div>
+        <div class="address-card__row-content">{{client.cin}}</div>
+      </div>
+      <div class="address-card__row">
+        <div class="address-card__row-title">Date permis</div>
+        <div class="address-card__row-content">{{client.date_permis}}</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+<!-----ok-->

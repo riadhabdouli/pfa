@@ -1,0 +1,78 @@
+
+<div class="block-space block-space--layout--after-header"></div>
+
+
+<div class="block">
+  <div class="container container--max--xl">
+  <!-- <div class="section-header">
+      <div class="section-header__body">
+        <h2 class="section-header__title"><ul class="section-header__groups">
+          <li class="section-header__groups-item">
+            <button type="button" class="section-header__groups-button " routerLink="/All4MyCar/client/home"> Home</button></li>
+          <li class="section-header__groups-item"><button type="button" class="section-header__groups-button section-header__groups-button--active">Espace client
+              </button></li>
+        </ul></h2>
+        <div class="section-header__divider"></div>
+
+      </div>
+    </div>-->
+  <div class="row">
+
+    <div class="col-12 col-lg-3 d-flex">
+
+      <div class="account-nav flex-grow-1">
+
+
+
+
+
+        <h4 class="account-nav__title">Navigation</h4>
+        <ul class="account-nav__list">
+          <li class="account-nav__item " (click)="gotodashboard()">
+           <!-- <a (click)="gotodashbord()">Dashboard</a></li>-->
+
+            <a routerLink="/All4MyCar/client/espace-client/dashboard"  routerLinkActive=" account-nav__item--active">Dashboard</a></li>
+
+
+
+            <li class="account-nav__item" (click)="gotovehicules()"><a routerLink="/All4MyCar/client/espace-client/vehicules" routerLinkActive=" account-nav__item--active" >Véhicules</a></li>
+            <li class="account-nav__item" (click)="gotoprofil()"  ><a routerLink="/All4MyCar/client/espace-client/profil" routerLinkActive=" account-nav__item--active" >Profile</a></li>
+            <li class="account-nav__item"><a >Mot de passe</a></li>
+           </ul>
+
+
+
+
+
+
+
+</div>
+    </div>
+
+  <div class="col-12 col-lg-9 mt-4 mt-lg-0">
+    <div *ngIf="position == 1">
+      <app-dashboard></app-dashboard>
+   </div>
+
+   <div *ngIf="position == 2">
+     <app-vehicules></app-vehicules>
+  </div>
+
+  <div *ngIf="position == 3">
+    <app-profil></app-profil>
+  </div>
+
+
+</div>
+  </div>
+  <div class="block-space block-space--layout--before-footer"></div>
+
+</div></div>
+
+
+
+
+
+
+
+

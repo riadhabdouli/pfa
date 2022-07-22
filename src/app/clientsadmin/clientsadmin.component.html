@@ -1,0 +1,141 @@
+<p-toast></p-toast>
+<div class="main-content">
+  <div class="container-fluid">
+
+      <div class="row">
+
+
+            <div class="card">
+             <div class="card-header card-header-danger card-header-icon">
+              <div class="card-icon"><i class="material-icons">person</i></div>
+                <h4 class="card-title">Listes Clients </h4>
+                  <br>
+                  <div class="row ">
+                    &nbsp;&nbsp;&nbsp;              &nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+
+                    <input pInputText type="text" (input)="dt.filter($event.target.value, 'firstNameclt', 'startsWith')" placeholder="Rechercher par nom" class="p-column-filter">
+                    &nbsp;&nbsp;&nbsp;                 &nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+
+
+
+                      <p-calendar  (onSelect)="getallclientsbydate($event)" (onClearClick)="cleartable()" [showButtonBar]="true" styleClass="p-column-filter" placeholder="Date inscription" [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
+                      &nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+
+
+        </div>
+
+
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <p-table  #dt  [value]="client"   [scrollable]="true" scrollHeight="400px"
+                  [rowHover]="true" [globalFilterFields]="['firstNameclt']" [loading]="loading"
+        [rows]="5" [showCurrentPageReport]="true"
+        [paginator]="true" currentPageReportTemplate="Affichage de {first} à {last} entrées sur {totalRecords}"
+        [filterDelay]="0"
+                  >
+                    <ng-template pTemplate="header" >
+                      <tr>
+
+                        <th pSortableColumn="firstNameclt">Nom & Prenom <p-sortIcon field="firstNameclt"></p-sortIcon></th>
+                        <th>Email</th>
+                        <th pSortableColumn="date_inscrip">Date registration <p-sortIcon field="date_inscrip"></p-sortIcon></th>
+                        <th class="text-right" >Actions</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body"  *ngIf="client === null">
+                      <tr>                    <td class="text-center"> aucune registration récente</td>
+
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-clt *ngIf="client !== null">
+                      <tr >
+
+                        <td>
+                          <img [alt]="clt.firstNameclt" *ngIf="clt.photoclt !== null;else contenu_pas_bon" src="http://localhost:8081/api/apii/image/logo/{{clt.photoclt}}" width="50" class="rounded-circle" style="vertical-align: middle" />
+                          <ng-template #contenu_pas_bon> <img src="assets/images/avatars/avat.jpg" alt="" width="50" class="rounded-circle" style="vertical-align: middle"></ng-template>
+                          &nbsp;
+                          <span class="image-text">{{clt.firstNameclt}}&nbsp;
+                            {{clt.lastNameclt}}</span>
+
+                          </td>
+                        <td>{{clt.emailclt}}</td>
+                        <td>{{clt.date_inscrip}}</td>
+                        <td class="td-actions text-right ">
+                          <button pButton pRipple icon="pi pi-info-circle" class="p-button-rounded p-button-info" (click)="profilclient(clt)" pTooltip="Details" ></button>
+
+                          &nbsp;
+
+                          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteclient(clt)"pTooltip="supprimer" ></button>
+                        </td>
+                      </tr>
+
+
+
+
+                      <!---->
+                    </ng-template>
+                    <ng-template pTemplate="summary">
+                      <div class="p-d-flex p-ai-center p-jc-between">
+                        Au total, il y a
+                        {{client ? client.length : 0 }} clients.
+                      </div>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="8" class="center">Aucun client trouvé</td>
+                    </tr>
+                </ng-template>
+                  </p-table>
+                  </div>
+      </div>
+            </div>
+
+      </div>
+      </div>
+      </div>
+      <p-dialog [(visible)]="clientDialog" [style]="{width: '450px'}" header="Client Details" [modal]="true" styleClass="p-fluid">
+        <ng-template pTemplate="content">
+           <img [src]="'http://localhost:8081/api/apii/image/logo/' + cltt.photoclt" [alt]="cltt.photoclt" class="center" height="150px" width="100px">
+           <br>
+            <div class="p-field">
+              <label for="name">Nom & Prenom&nbsp;&nbsp;</label>
+              {{cltt.firstNameclt}} {{cltt.lastNameclt}}
+              </div>
+              <div class="p-field">
+                <label for="name">Numero telephone&nbsp;&nbsp;</label>
+                  +216{{cltt.telclt}}
+                </div>
+                <div class="p-field">
+                  <label for="name">Email&nbsp;&nbsp;</label>
+                    {{cltt.emailclt}}
+                  </div>
+                  <div class="p-field">
+                    <label for="name">CIN&nbsp;&nbsp;</label>
+                      {{cltt.cin}}
+                    </div>
+                    <div class="p-field">
+                      <label for="name">Adresse&nbsp;&nbsp;</label>
+                        {{cltt.adresseclt}}
+                      </div>
+                      <div class="p-field">
+                        <label for="name">Date inscription&nbsp;&nbsp;</label>
+                          {{cltt.date_inscrip}}
+                        </div>
+        </ng-template>
+
+
+    </p-dialog>
+    <p-confirmDialog [style]="{width: '500px'}"></p-confirmDialog>
